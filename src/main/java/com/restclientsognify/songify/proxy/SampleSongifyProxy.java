@@ -2,6 +2,7 @@ package com.restclientsognify.songify.proxy;
 
 import com.restclientsognify.songify.dto.request.CreateSongRequestDto;
 import com.restclientsognify.songify.dto.response.CreateSongResponseDto;
+import com.restclientsognify.songify.dto.response.DeleteSongResponseDto;
 import com.restclientsognify.songify.dto.response.GetAllSongsResponseDto;
 import com.restclientsognify.songify.dto.response.GetSongResponseDto;
 import lombok.extern.log4j.Log4j2;
@@ -85,13 +86,36 @@ public class SampleSongifyProxy {
                 .scheme("http")
                 .host(url)
                 .port(port)
-                .path("/songs");
+                .path("/songs/{id}");
         try {
             ResponseEntity<GetSongResponseDto> response = restTemplate.exchange(
                     builder.buildAndExpand(id).toUri(),
                     HttpMethod.GET,
                     null,
                     GetSongResponseDto.class
+            );
+            return response.getBody();
+        } catch (HttpClientErrorException exception) {
+            log.error(exception.getMessage());
+        } catch (RestClientException exception) {
+            log.error(exception.getMessage());
+        }
+        return null;
+    }
+
+    public DeleteSongResponseDto makeDeleteRequest(Integer id) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("/songs/{id}");
+        try {
+            ResponseEntity<DeleteSongResponseDto> response = restTemplate.exchange(
+                    builder.buildAndExpand(id).toUri(),
+                    HttpMethod.DELETE,
+                    null,
+                    DeleteSongResponseDto.class
             );
             return response.getBody();
         } catch (HttpClientErrorException exception) {
