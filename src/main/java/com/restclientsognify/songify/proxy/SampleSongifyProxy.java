@@ -1,6 +1,7 @@
 package com.restclientsognify.songify.proxy;
 
 import com.restclientsognify.songify.dto.request.CreateSongRequestDto;
+import com.restclientsognify.songify.dto.request.PartiallyUpdateSongRequestDto;
 import com.restclientsognify.songify.dto.request.UpdateSongRequestDto;
 import com.restclientsognify.songify.dto.response.*;
 import lombok.extern.log4j.Log4j2;
@@ -138,6 +139,30 @@ public class SampleSongifyProxy {
                     HttpMethod.PUT,
                     httpEntity,
                     UpdateSongResponseDto.class
+            );
+            return response.getBody();
+        } catch (HttpClientErrorException exception) {
+            log.error(exception.getMessage());
+        } catch (RestClientException exception) {
+            log.error(exception.getMessage());
+        }
+        return null;
+    }
+
+    public PartiallyUpdateSongResponseDto makePatchRequest(Integer id, PartiallyUpdateSongRequestDto request) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("/songs/{id}");
+        HttpEntity<PartiallyUpdateSongRequestDto> httpEntity = new HttpEntity<>(request);
+        try {
+            ResponseEntity<PartiallyUpdateSongResponseDto> response = restTemplate.exchange(
+                    builder.buildAndExpand(id).toUri(),
+                    HttpMethod.PATCH,
+                    httpEntity,
+                    PartiallyUpdateSongResponseDto.class
             );
             return response.getBody();
         } catch (HttpClientErrorException exception) {
