@@ -2,6 +2,8 @@ package com.restclientsognify.songify.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.restclientsognify.songify.dto.response.DeleteSongResponseDto;
+import com.restclientsognify.songify.dto.response.UpdateSongResponseDto;
+import com.restclientsognify.songify.dto.request.UpdateSongRequestDto;
 import com.restclientsognify.songify.dto.response.GetAllSongsResponseDto;
 import com.restclientsognify.songify.dto.request.CreateSongRequestDto;
 import com.restclientsognify.songify.dto.response.CreateSongResponseDto;
@@ -39,6 +41,11 @@ public class SognifyService {
         DeleteSongResponseDto deleteSong = sampleSongifyClient.makeDeleteRequest(100);
         if (deleteSong != null) {
             log.info("Song deleted: " + deleteSong);
+        }
+
+        UpdateSongResponseDto updateSong = sampleSongifyClient.makePutRequest(5, new UpdateSongRequestDto("lala", "Madonna"));
+        if (updateSong != null) {
+            log.info("Song updated: " + updateSong);
         }
     }
 }

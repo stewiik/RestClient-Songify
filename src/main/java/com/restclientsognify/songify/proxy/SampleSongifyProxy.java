@@ -1,10 +1,8 @@
 package com.restclientsognify.songify.proxy;
 
 import com.restclientsognify.songify.dto.request.CreateSongRequestDto;
-import com.restclientsognify.songify.dto.response.CreateSongResponseDto;
-import com.restclientsognify.songify.dto.response.DeleteSongResponseDto;
-import com.restclientsognify.songify.dto.response.GetAllSongsResponseDto;
-import com.restclientsognify.songify.dto.response.GetSongResponseDto;
+import com.restclientsognify.songify.dto.request.UpdateSongRequestDto;
+import com.restclientsognify.songify.dto.response.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -116,6 +114,30 @@ public class SampleSongifyProxy {
                     HttpMethod.DELETE,
                     null,
                     DeleteSongResponseDto.class
+            );
+            return response.getBody();
+        } catch (HttpClientErrorException exception) {
+            log.error(exception.getMessage());
+        } catch (RestClientException exception) {
+            log.error(exception.getMessage());
+        }
+        return null;
+    }
+
+    public UpdateSongResponseDto makePutRequest(Integer id, UpdateSongRequestDto request) {
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .newInstance()
+                .scheme("http")
+                .host(url)
+                .port(port)
+                .path("/songs/{id}");
+        HttpEntity<UpdateSongRequestDto> httpEntity = new HttpEntity<>(request);
+        try {
+            ResponseEntity<UpdateSongResponseDto> response = restTemplate.exchange(
+                    builder.buildAndExpand(id).toUri(),
+                    HttpMethod.PUT,
+                    httpEntity,
+                    UpdateSongResponseDto.class
             );
             return response.getBody();
         } catch (HttpClientErrorException exception) {
