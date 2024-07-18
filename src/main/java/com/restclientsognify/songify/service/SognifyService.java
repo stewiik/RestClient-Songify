@@ -1,8 +1,10 @@
 package com.restclientsognify.songify.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.restclientsognify.songify.dto.response.GetAllSongsResponseDto;
 import com.restclientsognify.songify.dto.request.CreateSongRequestDto;
 import com.restclientsognify.songify.dto.response.CreateSongResponseDto;
+import com.restclientsognify.songify.dto.response.GetSongResponseDto;
 import com.restclientsognify.songify.proxy.SampleSongifyProxy;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,16 @@ public class SognifyService {
         CreateSongResponseDto postSong = sampleSongifyClient.makePostRequest(new CreateSongRequestDto("song5", "Madonna"));
         if (postSong != null) {
             log.info("Song created: " + postSong);
+        }
+
+        GetSongResponseDto getSong = sampleSongifyClient.makeGetSongRequest(100);
+        if (getSong != null) {
+            log.info("Song: " + getSong);
+        }
+
+        GetAllSongsResponseDto getAllSongs = sampleSongifyClient.makeGetAllRequest();
+        if (getAllSongs != null) {
+            log.info("All songs: " + getAllSongs);
         }
     }
 }
